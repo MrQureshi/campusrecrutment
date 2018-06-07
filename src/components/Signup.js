@@ -3,11 +3,11 @@ import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { Grid, Paper } from '@material-ui/core';
 import { TextField, Button } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
-import {auth} from '../firebase';
+import { auth, db } from '../firebase';
 
 import {
     withRouter,
-  } from 'react-router-dom';
+} from 'react-router-dom';
 
 
 const styles = {
@@ -37,7 +37,7 @@ const Signup = ({ history }) =>
         <Grid container>
             <Grid style={styles.flex} item xs={8}>
                 <Paper style={styles.paper} >
-                    <Form  history={history}/>
+                    <Form history={history} />
                 </Paper>
             </Grid>
         </Grid>
@@ -75,8 +75,14 @@ class Form extends Component {
 
         auth.doCreateUserWithEmailAndPassword(email, passwordOne)
             .then(authUser => {
-                this.setState(() => ({ ...initilaState }));
-                history.push('/dashboard');
+                db.doCreateUser(authUser.user.uid, username, email)
+                    .then(() => {
+                        this.setState(() => ({ ...initilaState }));
+                        history.push('/dashboard');
+                    })
+                    .catch(error => {
+                        this.setState(byPropKey('error', error))
+                    });
             })
             .catch(error => {
                 this.setState(byPropKey('error', error))
@@ -102,7 +108,7 @@ class Form extends Component {
             username === '';
 
         return (
-            <form  onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit}>
                 <FormControl fullWidth >
                     <TextField
                         value={username}

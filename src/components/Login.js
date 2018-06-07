@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { Grid, Paper } from '@material-ui/core';
 import { TextField, Button } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
-import {auth} from '../firebase';
+import {auth} from '../firebase'
 
 import { Link, withRouter} from 'react-router-dom';
 
@@ -19,8 +19,8 @@ const styles = {
         marginLeft: '50%',
         marginTop: 100,
         marginBottom: 10,
-        height: 330,
-        overflowY: 'auto',
+        // height: 330,
+        // overflowY: 'auto',
     },
 
 };
@@ -131,4 +131,4 @@ class Form extends Component{
     }
 }
 
-export default Login;
+export default withRouter(Login);
