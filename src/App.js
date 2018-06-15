@@ -2,24 +2,27 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 // import './App.css';
 
+import { firebase } from './firebase';
+
+
 import { BrowserRouter as Routes, Route } from 'react-router-dom';
 import Login from './components/Login'
 import Signup from './components/Signup'
 import Forgetpassword from './components/Forgetpassword'
-import Dashboard from './components/Dashboard'
+import Companydashboard from './components/CompanyDashboard'
+import Studentdashboard from './components/StudentDashboard'
+import Admin from './components/Admin'
+// import Signout from './components/Signout';
+
+
+import test from './components/test'
 
 class App extends Component {
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-        authUser: null,
-      };
-    }
+
+
 
   render() {
     return (
-      
       <Routes>
 
         <div>
@@ -27,11 +30,17 @@ class App extends Component {
           <Route path="/signup" component={Signup} />
 
           <Route path="/forgetpassword" component={Forgetpassword} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/company" component={Companydashboard} />
+          <Route exact path="/student" component={Studentdashboard} />
+          <Route exact path="/admin" component={Admin} />
+          {/* <Route exact path="/" component={Signout} /> */}
+
+
+          <Route exact path="/test" component={test} />
 
         </div>
       </Routes>
-      
+
 
     );
   }

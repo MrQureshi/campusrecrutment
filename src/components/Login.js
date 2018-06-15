@@ -1,11 +1,14 @@
-import React, {Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { Grid, Paper } from '@material-ui/core';
 import { TextField, Button } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
-import {auth} from '../firebase'
+import FormHelperText from '@material-ui/core/FormHelperText';
 
-import { Link, withRouter} from 'react-router-dom';
+import * as firebase from 'firebase';
+
+
+import { Link, withRouter } from 'react-router-dom';
 
 
 const styles = {
@@ -26,7 +29,7 @@ const styles = {
 };
 
 
-const Login = ({history}) =>
+const Login = ({ history }) =>
     <Fragment>
         <AppBar position="static">
             <Toolbar>
@@ -36,9 +39,9 @@ const Login = ({history}) =>
             </Toolbar>
         </AppBar>
         <Grid container>
-            <Grid style={styles.flex} item  xs={8}>
+            <Grid style={styles.flex} item xs={8}>
                 <Paper style={styles.paper} >
-                  <Form  history={history} />
+                    <Form history={history} />
                 </Paper>
             </Grid>
         </Grid>
@@ -54,16 +57,15 @@ const byPropKey = (propertName, value) => () => ({
     [propertName]: value,
 })
 
-class Form extends Component{
-    constructor(props){
+class Form extends Component {
+    constructor(props) {
         super(props);
 
-        this.state = {...initilaState};
+        this.state = { ...initilaState };
     }
-    
-    onSubmit =(event) => {
-        console.log('click');
-        const{
+
+    onSubmit = (event) => {
+        const {
             email,
             password
         } = this.state;
@@ -72,61 +74,88 @@ class Form extends Component{
             history,
           } = this.props;
 
-        auth.doSignInWithEmailAndPassword(email, password)
-        .then(() => {
-          this.setState(() => ({ ...initilaState }));
-          history.push('/dashboard');
-        })
-        .catch(error => {
-          this.setState(byPropKey('error', error));
-        });
-  
-      event.preventDefault();
+        const auth = firebase.auth();
+        auth.signInWithEmailAndPassword(email, password)
+            .then(() => {
+                if (email === "admin@gmail.com" && password === "1234567") {
+                    history.push('/admin');
+                }
+                else {
+                    var typeCheck;
+                    var userId = firebase.auth().currentUser.uid;
+                    const baseRef = firebase.database().ref();
+                    const usersRef = baseRef.child('users/' + userId);
+
+                    // alert(userId)
+                    // alert(baseRef)
+                    // alert(usersRef)
+
+                    usersRef.on('value', snap => {
+                        typeCheck = snap.val().account;
+
+
+                        if (typeCheck === 'Student') {
+
+                            history.push('/student');
+                        }
+                        if (typeCheck === 'Company') {
+
+                            history.push('/company');
+                        }
+                    })
+                }
+                //   this.setState(() => ({ ...initilaState }));
+                //   history.push('/admin');
+            })
+            .catch(error => {
+                this.setState(byPropKey('error', error));
+            });
+        event.preventDefault();
     }
 
-    render(){ 
-        const{
+    render() {
+        const {
             email, password,
             error
         } = this.state;
 
-        const isInvalid = 
-        password === '' ||
-        email === '';
+        const isInvalid =
+            password === '' ||
+            email === '';
 
-        return(
-            <form  onSubmit={this.onSubmit}>
-            <FormControl fullWidth >
-                <TextField
-                    value={email}
-                    onChange={event => this.setState(byPropKey('email', event.target.value))}
-                    label="Email"
-                    margin="normal"
-                /><br />
-                <TextField
-                    value={password}
-                    onChange={event => this.setState(byPropKey('password', event.target.value))}
-                    label="Password"
-                    margin="normal"
-                    type="password"
-                />
-                <br />
-                <Link to="/forgetpassword">Forget Password</Link>
-                <br />
-                <Button
-                    disabled={isInvalid}
-                    type="submit"
-                    color="primary"
-                    variant="raised" >Login</Button>
-                <br />
-            </FormControl>
-            {error && <p>{error.message}</p>}
-            
-            <Link to="/Signup">Sign Up</Link>
-        
-        </form>
-        
-        
+        return (
+            <form onSubmit={this.onSubmit}>
+                <FormControl fullWidth >
+                    <TextField
+                        value={email}
+                        onChange={event => this.setState(byPropKey('email', event.target.value))}
+                        label="Email"
+                        margin="normal"
+                    /><br />
+                    <TextField
+                        value={password}
+                        onChange={event => this.setState(byPropKey('password', event.target.value))}
+                        label="Password"
+                        margin="normal"
+                        type="password"
+                    />
+                    <br />
+                    <Link to="/forgetpassword">Forget Password</Link>
+                    <br />
+                    <Button
+                        disabled={isInvalid}
+                        type="submit"
+                        color="primary"
+                        variant="raised" >Login</Button>
+                    <br />
+                </FormControl>
+                {error && <FormHelperText>{error.message} </FormHelperText>}
+
+                <Link to="/Signup">Sign Up</Link>
+
+            </form>
+
+
         )
     }
 }
