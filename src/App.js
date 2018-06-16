@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 // import './App.css';
 
-import { firebase } from './firebase';
+// import { firebase } from './firebase';
 
 
 import { BrowserRouter as Routes, Route } from 'react-router-dom';
@@ -13,19 +13,18 @@ import Companydashboard from './components/CompanyDashboard'
 import Studentdashboard from './components/StudentDashboard'
 import Admin from './components/Admin'
 // import Signout from './components/Signout';
-
+// import { firebase } from '../firebase';
 
 import test from './components/test'
 
 class App extends Component {
-
-
+ 
 
   render() {
     return (
       <Routes>
 
-        <div>
+        <div >
           <Route exact path="/" component={Login} />
           <Route path="/signup" component={Signup} />
 
