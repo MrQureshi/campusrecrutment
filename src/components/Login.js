@@ -98,7 +98,7 @@ class Form extends Component {
 
                             history.push('/student');
                         }
-                        if (typeCheck === 'Company') {
+                        else if (typeCheck === 'Company') {
 
                             history.push('/company');
                         }

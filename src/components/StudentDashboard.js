@@ -1,12 +1,17 @@
-import React, {Component, Fragment } from 'react';
-import { AppBar, Toolbar, Typography, Grid, Paper, Button } from '@material-ui/core';
+import React, { Component, Fragment } from 'react';
+import { AppBar, Toolbar, Typography, Grid, Paper, Button, Tabs, Tab } from '@material-ui/core';
 // import {  } from '@material-ui/core';
 // import { TextField, Button } from '@material-ui/core';
 // import { FormControl } from '@material-ui/core';
 // import Signout from './Signout'
 
+import Jobslist from './JobsList'
+import Userprofile from './UserProfile'
+import CompanyList from './CompanyList'
+import Createcv from './CreateCV'
+import * as firebase from 'firebase'
 
-import {firebase , auth } from '../firebase';
+
 
 const styles = {
 
@@ -27,36 +32,64 @@ class Dashboard extends Component {
 
     constructor(props) {
         super(props);
-    
+
         this.state = {
-            
-          authUser: null,
+            users: {
+                uid: null,
+                username: null,
+                email: null,
+                account: null,
+            },
+            value: 0,
         };
-      }
-    
-      componentDidMount() {
-        firebase.auth.onAuthStateChanged(authUser => {
-          authUser
-            ? this.setState(() => ({ authUser }))
-            : this.setState(() => ({ authUser: null }));
-        });
-      }
+    }
+
+    handleChange = (event, value) => {
+        this.setState({ value });
+    };
+
+    componentDidMount() {
+        firebase.auth().onAuthStateChanged(() => {
+            if (firebase.auth().currentUser) {
+                var userRef = firebase.database().ref().child("users/" + firebase.auth().currentUser.uid);
+                userRef.on("value", snap => {
+                    let objCurrentuser = snap.val()
+
+                    this.setState({
+                        users: objCurrentuser
+
+                    })
+
+                })
+            }
+        })
+    }
 
     render() {
         return (
             <Fragment>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="display2" color="inherit" style={styles.flex}  >
-                            DASHBOARD
-            </Typography>
-                        <Button type="button" onClick={auth.doSignOut} color="inherit" >Logout</Button>
+                    <Userprofile />
+                    <Typography variant="display2" color="inherit" style={styles.flex}  >
+                    {this.state.users.username }
+                    <Typography variant="subheading" style={styles.flex} color="inherit"  >
+                        {this.state.users.account}
+                    </Typography>
+                </Typography>
+                        <Button
+                            color="inherit"
+                            onClick={() => firebase.auth().signOut().then(() => this.props.history.push("/"))}>
+                            Sign out
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <Grid container>
                     <Grid item xs={4}>
                         <Paper style={styles.paper} >
-
+                        {this.state.value === 0 ? <CompanyList/> : null}
+                        {this.state.value === 1 ? <Jobslist/> : null}
+                        {this.state.value ===2 ? <Createcv/>: null}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
@@ -65,6 +98,22 @@ class Dashboard extends Component {
                         </Paper>
                     </Grid>
                 </Grid>
+                <Paper>
+                    <Tabs
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        centered
+                    >
+                        {/* {console.log(this.state.value)} */}
+                        <Tab label="View Company" />
+                        <Tab label="View Jobs" />
+                        <Tab label="Creat CV" />
+                        {/* <Tab label="Create job" /> */}
+                        {/* <Tab label={<Createjob />} /> */}
+                    </Tabs>
+                </Paper>
             </Fragment>
         )
     }
