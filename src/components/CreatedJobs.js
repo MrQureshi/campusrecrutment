@@ -50,19 +50,20 @@ class joblist extends Component {
             <List component="ul">
                 {/* <ListSubheader component="div">Students List</ListSubheader> */}
                 {
-                     this.state.state === null 
+                     this.state.jobList 
                      ?
+                     this.state.jobList.map((job, index) => (
+                        < ListItem button key={index} >
+                            <ListItemText primary={job.jobTitle} />
+                            <ListItemText primary={job.salary} />
+                            <ListItemText primary={job.discription} />
+                        </ListItem>
+                     ))
+                        :
                     < ListItem  >
                         <ListItemText primary="Not a single Student register yet"/>
                     </ListItem>
-                    :
-                    this.state.jobList.map((job, index) => (
-                    < ListItem button key={index} >
-                        <ListItemText primary={job.jobTitle} />
-                        <ListItemText primary={job.salary} />
-                        <ListItemText primary={job.discription} />
-                    </ListItem>
-                ))
+                    
                 }
             </List>
         </div>

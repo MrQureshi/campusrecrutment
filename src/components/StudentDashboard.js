@@ -9,6 +9,8 @@ import Jobslist from './JobsList'
 import Userprofile from './UserProfile'
 import CompanyList from './CompanyList'
 import Createcv from './CreateCV'
+import Mycv, {Show} from './MyCV'
+
 import * as firebase from 'firebase'
 
 
@@ -64,6 +66,9 @@ class Dashboard extends Component {
             }
         })
     }
+    sendCurrentData = (currentData) =>{
+        this.setState({currentData})
+    }
 
     render() {
         return (
@@ -89,12 +94,12 @@ class Dashboard extends Component {
                         <Paper style={styles.paper} >
                         {this.state.value === 0 ? <CompanyList/> : null}
                         {this.state.value === 1 ? <Jobslist/> : null}
-                        {this.state.value ===2 ? <Createcv/>: null}
+                        {this.state.value ===2 ? <Fragment> <Createcv/> <Mycv sendCurrentData={this.sendCurrentData} /></Fragment> : null}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
                         <Paper style={styles.paper} >
-
+                            <Show currentData = {this.state.currentData}/>
                         </Paper>
                     </Grid>
                 </Grid>

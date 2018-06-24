@@ -48,7 +48,7 @@ class Company extends Component {
                     this.setState({
                         companies
                     })
-                    // console.log(this.state.companies)
+                    console.log(this.state.companies)
                 })
             }
         })

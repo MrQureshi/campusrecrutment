@@ -4,10 +4,11 @@ import { AppBar, Toolbar, Typography, Grid, Paper, Button, Tabs, Tab } from '@ma
 // import IconButton from '@material-ui/core/IconButton';
 
 import Studentlist from './StudentList'
-import StudentCvs from './StudentCVs'
+
 import Createjob from './Createjob'
 import Userprofile from './UserProfile'
 import Createdjobs from './CreatedJobs'
+import Cvlist from './CvsList'
 
 import * as firebase from 'firebase'
 
@@ -119,7 +120,7 @@ class Dashboard extends Component {
 
                             {this.state.value === 0 ?  <Studentlist /> : null}
 
-                            {this.state.value === 1 ? <StudentCvs /> : null}
+                            {this.state.value === 1 ? <Cvlist /> : null}
 
                             {this.state.value === 2 ?<Fragment> <Createjob/> <Createdjobs/> </Fragment> : null}
 
@@ -127,7 +128,7 @@ class Dashboard extends Component {
                     </Grid>
                     <Grid item xs={8}>
                         <Paper style={styles.paper} >
-                            <Createjob />
+                            {/* <Createjob /> */}
                         </Paper>
                     </Grid>
                 </Grid>

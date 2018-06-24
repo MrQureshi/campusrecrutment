@@ -84,10 +84,10 @@ export default class extends Component {
             discription,
     } = this.state;
 
-    console.log(this.state.education);
-    console.log(this.state.skills);
-    console.log(this.state.experience);
-    console.log(this.state.discription);
+    // console.log(this.state.education);
+    // console.log(this.state.skills);
+    // console.log(this.state.experience);
+    // console.log(this.state.discription);
 
     
     
@@ -96,6 +96,7 @@ export default class extends Component {
         var userID = firebase.auth().currentUser.uid;
         
         firebase.database().ref('cv/'+userID).set({
+            uid: userID,
             username: this.state.users.username,
             email: this.state.users.email,
             education: education,
@@ -108,7 +109,7 @@ export default class extends Component {
             this.setState(byPropKey('error', error))
         });
 
-        event.preventDefault();
+        // event.preventDefault();
     }
     render() {
         const { open } = this.state;
