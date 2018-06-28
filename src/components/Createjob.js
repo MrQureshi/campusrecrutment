@@ -49,6 +49,22 @@ export default class extends Component {
       open: !this.state.open,
     })
   }
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(() => {
+        if (firebase.auth().currentUser) {
+            var userRef = firebase.database().ref().child("users/" + firebase.auth().currentUser.uid);
+            userRef.on("value", snap => {
+                let objCurrentuser = snap.val()
+
+                this.setState({
+                    users: objCurrentuser
+                })
+
+            })
+        }
+
+    })
+}
 
   onSubmit = (event) => {
     const {
@@ -63,10 +79,17 @@ export default class extends Component {
       jobTitle: jobTitle,
       salary: salary,
       discription: discription,
-      uid: userID 
+      uid: userID,
+      username: this.state.users.username,
+      email: this.state.users.email
     }
+    
+     // const postKey = firebase.database().ref().child('jobs').push().key;
+        // console.log("postkey..." + postKey )
 
-    firebase.database().ref().child("jobs").push(
+    // firebase.database().ref().child("jobs").push(
+
+    firebase.database().ref().child('jobs/').push(
       job
     ).then(()=>{
       this.setState(() => ({ ...initilaState }));

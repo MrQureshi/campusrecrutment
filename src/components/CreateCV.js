@@ -83,15 +83,6 @@ export default class extends Component {
             experience,
             discription,
     } = this.state;
-
-    // console.log(this.state.education);
-    // console.log(this.state.skills);
-    // console.log(this.state.experience);
-    // console.log(this.state.discription);
-
-    
-    
-        
     
         var userID = firebase.auth().currentUser.uid;
         

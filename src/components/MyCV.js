@@ -6,14 +6,19 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
 import { Typography } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+import Toolbar from '@material-ui/core/Toolbar';
 
 import * as firebase from 'firebase';
-// import currentDataService from '../services/currentDataService'
+
 const styles = {
 
     list: {
         width: '100%',
-    }
+    },
+    pos: {
+        marginTop: 12,
+    },
 };
 
 class userCV extends Component {
@@ -25,7 +30,6 @@ class userCV extends Component {
             myCV: [],
             keys: [],
             currentData: [],
-            myname: ['Ab', 'Cd', 'Ef']
         }
     }
 
@@ -38,10 +42,9 @@ class userCV extends Component {
             for (let getData in objGetCuurentData) {
                 currentData.push(objGetCuurentData[getData]);
             }
-            console.log(currentData);
+            // console.log(currentData);
             this.setState({ currentData })
             this.props.sendCurrentData(this.state.currentData)
-            // , ()=> currentDataService.addCurrentData(this.state.currentData));
         })
     }
 
@@ -100,7 +103,7 @@ class userCV extends Component {
 }
 export default userCV;
 
-class Show extends Component {
+class ShowCV extends Component {
 
     componentWillReceiveProps(nextProps) {
 
@@ -111,35 +114,57 @@ class Show extends Component {
             <Fragment>
 
                 <ul>
-                    {this.props.currentData && this.props.currentData.length && this.props.currentData.map((data, index) => {
-                        return
-                        <div><li key={index}>{data.username}</li>
-                            <li key={index}>{data.email}</li>
-                            </div>
-                        })}
+                    {this.props.currentData && this.props.currentData.length && this.props.currentData.map((data, index) => (
 
-                    {/* </li> */}
+                        <Fragment>
+
+                            <Toolbar color="primary">
+                                <Typography variant="display3"  key={index}>
+                                    {data.username}
+                                </Typography>
+                            </Toolbar>
+
+                            <Divider />
+
+                            <Typography style={styles.pos} color="textSecondary">
+                                Email
+                            </Typography>
+                            <Typography variant="headline" key={index} component="h2">
+                                {data.email}
+                            </Typography>
+
+                            <Typography style={styles.pos} color="textSecondary">
+                                Skills
+                            </Typography>
+                            <Typography variant="headline" key={index} component="h2">
+                                {data.skills}
+                            </Typography>
+                            <Typography style={styles.pos} color="textSecondary">
+                                Education
+                            </Typography>
+                            <Typography variant="headline" key={index} component="h2">
+                                {data.education}
+                            </Typography>
+                            <Typography style={styles.pos} color="textSecondary">
+                                Experience
+                            </Typography>
+                            <Typography variant="headline" key={index} component="h2">
+                                {data.experience}
+                            </Typography>
+                            <Typography style={styles.pos} key={index} color="textSecondary">
+                                Discription
+                            </Typography>
+                            <Typography variant="headline" component="h2">
+                                {data.discription}
+                            </Typography>
+                        </Fragment>
+                    ))}
                 </ul>
-                {/* {this.props.currentData} */}
-                ETC
             </Fragment>
         )
     }
 }
 
-
-// const Show = () => {
-
-// console.log(props.currentData)
-
-//     return (
-//         <Fragment>
-//             ETCc
-//         </Fragment>
-//     )
-
-// }
-
 export {
-    Show
+    ShowCV
 };

@@ -3,12 +3,12 @@ import { AppBar, Toolbar, Typography, Grid, Paper, Button, Tabs, Tab } from '@ma
 // import AccountCircle from '@material-ui/icons/AccountCircle';
 // import IconButton from '@material-ui/core/IconButton';
 
-import Studentlist from './StudentList'
+import Studentlist, { ShowStudentDeatils } from './StudentList'
 
 import Createjob from './Createjob'
 import Userprofile from './UserProfile'
-import Createdjobs from './CreatedJobs'
-import Cvlist from './CvsList'
+import Createdjobs, { ShowMyJobs } from './CreatedJobs'
+import Cvlist, { ShowCVList } from './CvsList'
 
 import * as firebase from 'firebase'
 
@@ -32,7 +32,7 @@ const styles = {
     list: {
         width: '100%',
     },
-    
+
 };
 
 
@@ -59,15 +59,7 @@ class Dashboard extends Component {
 
 
     handleChange = (event, value) => {
-
-
         this.setState({ value });
-
-        
-
-        // if (value = 0) {
-        //     console.log("view students")
-        // }
     };
 
     componentDidMount() {
@@ -86,22 +78,27 @@ class Dashboard extends Component {
         });
     }
 
+    sendSL_currentData = (SL_currentData) => {
+        this.setState({ SL_currentData })
+    }
+    sendCV_CurrentData = (CV_CurrentData) => {
+        this.setState({ CV_CurrentData })
+    }
+
+    sendMJ_CurrentData = (MJ_CurrentData) => {
+        this.setState({ MJ_CurrentData })
+    }
+
+
     render() {
         return (
-            <Fragment authUser={this.state.authUser}>
+            <Fragment >
                 <AppBar position="static">
                     <Toolbar>
-                        <Userprofile/>
-                    {/* <IconButton
-                                    // aria-owns={open ? 'menu-appbar' : null}
-                                    // aria-haspopup="true"
-                                    onClick={this.handleClicked}
-                                    color="inherit"
-                                >
-                    <AccountCircle style={styles.size} />
-                    </IconButton > */}
+                        <Userprofile />
+                        
                         <Typography variant="display2" color="inherit" style={styles.flex}  >
-                            {this.state.users.username }
+                            {this.state.users.username}
                             <Typography variant="subheading" style={styles.flex} color="inherit"  >
                                 {this.state.users.account}
                             </Typography>
@@ -118,17 +115,20 @@ class Dashboard extends Component {
                     <Grid item xs={4}>
                         <Paper style={styles.paper} >
 
-                            {this.state.value === 0 ?  <Studentlist /> : null}
+                            {this.state.value === 0 ? <Studentlist sendSL_currentData={this.sendSL_currentData} /> : null}
 
-                            {this.state.value === 1 ? <Cvlist /> : null}
+                            {this.state.value === 1 ? <Cvlist sendCV_CurrentData={this.sendCV_CurrentData} /> : null}
 
-                            {this.state.value === 2 ?<Fragment> <Createjob/> <Createdjobs/> </Fragment> : null}
-
+                            {this.state.value === 2 ? <Fragment> <Createjob /> <Createdjobs sendMJ_CurrentData={this.sendMJ_CurrentData} /> </Fragment> : null}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
                         <Paper style={styles.paper} >
-                            {/* <Createjob /> */}
+                            {this.state.value === 0 ? <ShowStudentDeatils SL_currentData={this.state.SL_currentData} /> : null}
+
+                            {this.state.value === 1 ? <ShowCVList CV_CurrentData={this.state.CV_CurrentData} /> : null}
+
+                            {this.state.value === 2 ? <ShowMyJobs MJ_CurrentData={this.state.MJ_CurrentData} /> : null}
                         </Paper>
                     </Grid>
                 </Grid>
@@ -140,11 +140,10 @@ class Dashboard extends Component {
                         textColor="primary"
                         centered
                     >
-                        
                         <Tab label="View Students" />
                         <Tab label="View CVs" />
                         <Tab label="Created Jobs" />
-                        
+
                     </Tabs>
                 </Paper>
             </Fragment >

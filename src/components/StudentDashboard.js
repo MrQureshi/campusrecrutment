@@ -1,19 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { AppBar, Toolbar, Typography, Grid, Paper, Button, Tabs, Tab } from '@material-ui/core';
-// import {  } from '@material-ui/core';
-// import { TextField, Button } from '@material-ui/core';
-// import { FormControl } from '@material-ui/core';
-// import Signout from './Signout'
 
-import Jobslist from './JobsList'
+
+import Jobslist, {ShowJobList} from './JobsList'
 import Userprofile from './UserProfile'
-import CompanyList from './CompanyList'
+import CompanyList,{ShowComapnyDeatils} from './CompanyList'
 import Createcv from './CreateCV'
-import Mycv, {Show} from './MyCV'
+import Mycv, {ShowCV} from './MyCV'
 
 import * as firebase from 'firebase'
-
-
 
 const styles = {
 
@@ -69,6 +64,14 @@ class Dashboard extends Component {
     sendCurrentData = (currentData) =>{
         this.setState({currentData})
     }
+    sendCL_currentData=(CL_currentData)=>{
+        this.setState({CL_currentData})
+    }
+
+    sendJL_CurrentData=(JL_CurrentData)=>{
+        this.setState({JL_CurrentData})
+    }
+    
 
     render() {
         return (
@@ -92,14 +95,16 @@ class Dashboard extends Component {
                 <Grid container>
                     <Grid item xs={4}>
                         <Paper style={styles.paper} >
-                        {this.state.value === 0 ? <CompanyList/> : null}
-                        {this.state.value === 1 ? <Jobslist/> : null}
+                        {this.state.value === 0 ? <CompanyList sendCL_currentData={this.sendCL_currentData}/> : null}
+                        {this.state.value === 1 ? <Jobslist sendJL_CurrentData={this.sendJL_CurrentData} /> : null}
                         {this.state.value ===2 ? <Fragment> <Createcv/> <Mycv sendCurrentData={this.sendCurrentData} /></Fragment> : null}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
                         <Paper style={styles.paper} >
-                            <Show currentData = {this.state.currentData}/>
+                        {this.state.value === 0 ? <ShowComapnyDeatils CL_currentData = {this.state.CL_currentData}/>  : null}
+                        {this.state.value === 1 ? <ShowJobList JL_CurrentData={this.state.JL_CurrentData} /> : null}
+                        {this.state.value ===2 ?  <ShowCV currentData = {this.state.currentData}/>  : null}
                         </Paper>
                     </Grid>
                 </Grid>
@@ -111,12 +116,9 @@ class Dashboard extends Component {
                         textColor="primary"
                         centered
                     >
-                        {/* {console.log(this.state.value)} */}
                         <Tab label="View Company" />
                         <Tab label="View Jobs" />
                         <Tab label="Creat CV" />
-                        {/* <Tab label="Create job" /> */}
-                        {/* <Tab label={<Createjob />} /> */}
                     </Tabs>
                 </Paper>
             </Fragment>

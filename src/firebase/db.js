@@ -5,7 +5,8 @@ db.ref(`users/${id}`).set({
   username,
   email,
   password, 
-  account
+  account,
+  
 });
 
 export const onceGetUsers = () =>
