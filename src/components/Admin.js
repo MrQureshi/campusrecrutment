@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { AppBar, Toolbar, Typography, Grid, Paper, Button, Tabs, Tab } from '@material-ui/core';
 
 // import Userprofile from './UserProfile'
-import Jobslist, { ShowJobList } from './JobsList'
+import Jobslist, { ShowJobList } from './AdminJobsList'
 import CompanyList, { ShowComapnyDeatils } from './AdminCompanyList'
 import Studentlist, { ShowStudentDeatils } from './AdminStudentList'
 
-import Cvlist, { ShowCVList } from './CvsList'
+import Cvlist, { ShowCVList } from './AdminCvsList'
 
 import * as firebase from 'firebase'
 
@@ -31,7 +31,6 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-
             value: 0
         };
     }
@@ -52,11 +51,6 @@ class Dashboard extends Component {
     sendJL_CurrentData = (JL_CurrentData) => {
         this.setState({ JL_CurrentData })
     }
-
-
-        
-    
-
 
     render() {
         return (

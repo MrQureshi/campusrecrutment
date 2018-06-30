@@ -86,10 +86,6 @@ class Form extends Component {
                     const baseRef = firebase.database().ref();
                     const usersRef = baseRef.child('users/' + userId);
 
-                    // alert(userId)
-                    // alert(baseRef)
-                    // alert(usersRef)
-
                     usersRef.on('value', snap => {
                         typeCheck = snap.val().account;
 

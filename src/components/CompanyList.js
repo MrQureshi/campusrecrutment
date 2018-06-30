@@ -104,7 +104,6 @@ class Company extends Component {
             </div>
         )
     }
-
 }
 export default Company;
 

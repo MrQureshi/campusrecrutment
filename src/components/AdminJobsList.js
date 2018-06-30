@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 // import { Paper } from '@material-ui/core';
+
+import { Button, } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { Button, } from '@material-ui/core';
 
 import { Typography } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
@@ -124,32 +125,14 @@ class ShowJobList extends Component {
         }
     }
 
+    handleDelete = (key) => {
 
-    handleApply(key) {
-        // console.log(key)
-        // this.setState({ temporarykey: key })
-        var currentUser = firebase.auth().currentUser;
-        var currentId = firebase.auth().currentUser.uid;
-        // console.log(currentId)
+        console.log("A", key)
 
-        firebase.database().ref("cv/" + currentId).on("value", snap => {
-            console.log("A", snap.val());
-            // let obj;
-            if (snap.val() === null) {
-                alert("Make sure you didn't create CV")
-            }
-            else {
-                let obj = (snap.val() || {
-                    name: currentUser.displayName,
-                    email: currentUser.email,
-                });
-                console.log("B", obj);
-                var rootRef = firebase.database().ref();
-                const speedRef = rootRef.child("jobs/" + key + "/apply/" + currentId).set(obj)
-    
-            }
-        })
+        firebase.database().ref(`jobs/${key}`).remove();
+
     }
+
     render() {
         return (
             <Fragment>
@@ -186,14 +169,10 @@ class ShowJobList extends Component {
                             <Typography variant="headline" component="h2">
                                 {data.discription}
                             </Typography>
-
                             <Divider />
-
-                            <Button style={styles.pos} color="primary" disabled={this.state.open} variant="raised"
-                                onClick={this.handleApply.bind(this, data.key)}
-                            >
-                                Apply
-                            </Button>
+                            <Button style={styles.pos} color="primary" variant="raised"
+                                onClick={this.handleDelete.bind(this, data.key)}
+                            >Delete</Button>
                         </Fragment>
                     ))}
                 </ul>

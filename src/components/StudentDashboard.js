@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { AppBar, Toolbar, Typography, Grid, Paper, Button, Tabs, Tab } from '@material-ui/core';
 
 
-import Jobslist, {ShowJobList} from './JobsList'
+import Jobslist, { ShowJobList } from './JobsList'
 import Userprofile from './UserProfile'
-import CompanyList,{ShowComapnyDeatils} from './CompanyList'
+import CompanyList, { ShowComapnyDeatils } from './CompanyList'
 import Createcv from './CreateCV'
-import Mycv, {ShowCV} from './MyCV'
+import Mycv, { ShowCV } from './MyCV'
 
 import * as firebase from 'firebase'
 
@@ -61,30 +61,30 @@ class Dashboard extends Component {
             }
         })
     }
-    sendCurrentData = (currentData) =>{
-        this.setState({currentData})
+    sendCurrentData = (currentData) => {
+        this.setState({ currentData })
     }
-    sendCL_currentData=(CL_currentData)=>{
-        this.setState({CL_currentData})
+    sendCL_currentData = (CL_currentData) => {
+        this.setState({ CL_currentData })
     }
 
-    sendJL_CurrentData=(JL_CurrentData)=>{
-        this.setState({JL_CurrentData})
+    sendJL_CurrentData = (JL_CurrentData) => {
+        this.setState({ JL_CurrentData })
     }
-    
+
 
     render() {
         return (
             <Fragment>
                 <AppBar position="static">
                     <Toolbar>
-                    <Userprofile />
-                    <Typography variant="display2" color="inherit" style={styles.flex}  >
-                    {this.state.users.username }
-                    <Typography variant="subheading" style={styles.flex} color="inherit"  >
-                        {this.state.users.account}
-                    </Typography>
-                </Typography>
+                        <Userprofile />
+                        <Typography variant="display2" color="inherit" style={styles.flex}  >
+                            {this.state.users.username}
+                            <Typography variant="subheading" style={styles.flex} color="inherit"  >
+                                {this.state.users.account}
+                            </Typography>
+                        </Typography>
                         <Button
                             color="inherit"
                             onClick={() => firebase.auth().signOut().then(() => this.props.history.push("/"))}>
@@ -95,16 +95,16 @@ class Dashboard extends Component {
                 <Grid container>
                     <Grid item xs={4}>
                         <Paper style={styles.paper} >
-                        {this.state.value === 0 ? <CompanyList sendCL_currentData={this.sendCL_currentData}/> : null}
-                        {this.state.value === 1 ? <Jobslist sendJL_CurrentData={this.sendJL_CurrentData} /> : null}
-                        {this.state.value ===2 ? <Fragment> <Createcv/> <Mycv sendCurrentData={this.sendCurrentData} /></Fragment> : null}
+                            {this.state.value === 0 ? <CompanyList sendCL_currentData={this.sendCL_currentData} /> : null}
+                            {this.state.value === 1 ? <Jobslist sendJL_CurrentData={this.sendJL_CurrentData} /> : null}
+                            {this.state.value === 2 ? <Fragment> <Createcv /> <Mycv sendCurrentData={this.sendCurrentData} /></Fragment> : null}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
                         <Paper style={styles.paper} >
-                        {this.state.value === 0 ? <ShowComapnyDeatils CL_currentData = {this.state.CL_currentData}/>  : null}
-                        {this.state.value === 1 ? <ShowJobList JL_CurrentData={this.state.JL_CurrentData} /> : null}
-                        {this.state.value ===2 ?  <ShowCV currentData = {this.state.currentData}/>  : null}
+                            {this.state.value === 0 ? <ShowComapnyDeatils CL_currentData={this.state.CL_currentData} /> : null}
+                            {this.state.value === 1 ? <ShowJobList JL_CurrentData={this.state.JL_CurrentData} /> : null}
+                            {this.state.value === 2 ? <ShowCV currentData={this.state.currentData} /> : null}
                         </Paper>
                     </Grid>
                 </Grid>

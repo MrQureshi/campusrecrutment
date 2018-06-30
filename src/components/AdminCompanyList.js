@@ -8,8 +8,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 // import ListSubheader from '@material-ui/core/ListSubheader';
 
-
-
 import { Typography } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,9 +22,7 @@ const styles = {
     pos: {
         marginTop: 12,
     },
-    clr: {
-        color: "Blue"
-    }
+
 };
 
 class Company extends Component {
@@ -35,63 +31,53 @@ class Company extends Component {
 
         this.state = {
             companies: [],
-            keys:[],
             CL_currentData: []
         }
     }
+    
+    handleClick(key) {
+        // console.log("clik", key);
+        firebase.database().ref(`users/${key}`).once('value').then((snap) => {
+            var objGetCL_CurentData = snap.val();
+            // console.log(objGetCL_CurentData);
 
-    onSelectApply() {
-        console.log("clickeeed ")
+            let CL_currentData = [];
+
+            CL_currentData.push({ ...objGetCL_CurentData, key });
+
+            // console.log(currentData);
+            this.setState({ CL_currentData })
+            this.props.sendCL_currentData(this.state.CL_currentData, )
+        })
     }
-    handleClick(keys) {
-        console.log("clik", keys);
-        // firebase.database().ref('users/').orderByChild('email').equalTo(email).once('value').then((snap) => {
-        //     var objGetCL_CurentData = snap.val();
-        //     console.log(objGetCL_CurentData);
-
-        //     let CL_currentData = [];
-        //     let CL_keys =[];
-        //     for (let getData in objGetCL_CurentData) {
-        //         CL_currentData.push(objGetCL_CurentData[getData]);
-        //         CL_keys.push(getData)
-        //     }
-        //     // console.log(currentData);
-        //     this.setState({ CL_currentData })
-        //     this.props.sendCL_currentData(this.state.CL_currentData, CL_keys)
-        // })
-    }
-
     componentDidMount() {
         firebase.auth().onAuthStateChanged(() => {
             if (firebase.auth().currentUser) {
-                firebase.database().ref('users').once('value').then(snap => {
+                firebase.database().ref('users').on('value', (snap) => {
                     let obj = snap.val();
+                    // console.log("A", obj)
                     let objCompanies = {};
                     for (let key in obj) {
                         if (obj[key].account === 'Company') {
                             objCompanies[key] = obj[key];
-                            
-                            // alert(objCompanies);
                         }
                     }
                     // console.log(objCompanies)
-
                     let companies = [];
-                    let keys = [];
-                    for (let a in objCompanies) {
-                        companies.push(objCompanies[a])
-                        keys.push(a);
+                    // console.log("B", objCompanies)
+
+                    for (let key in objCompanies) {
+                        companies.push({ ...objCompanies[key], key })
                     }
+                    // console.log("C", companies)
                     this.setState({
-                        companies, keys
+                        companies
                     })
-                    // console.log(this.state.companies)
+                    // console.log("D", this.state.companies)
                 })
             }
         })
-
     }
-
     render() {
         return (
             <div style={styles.list}>
@@ -100,10 +86,10 @@ class Company extends Component {
                     {
                         this.state.companies
                             ?
-                            this.state.companies.map((clist, keys) =>
-                                < ListItem button onClick={this.handleClick.bind(this, keys)} key={keys} >
-                                    <ListItemText primary={clist.username} key={keys} />
-                                    <ListItemText primary={clist.email} key={keys}/>
+                            this.state.companies.map((clist, index) =>
+                                < ListItem button onClick={this.handleClick.bind(this, clist.key)} key={index} >
+                                    <ListItemText primary={clist.username} />
+                                    <ListItemText primary={clist.email} />
                                 </ListItem>)
                             :
                             < ListItem  >
@@ -123,25 +109,36 @@ class ShowComapnyDeatils extends Component {
     componentWillReceiveProps(nextProps) {
     }
 
-    handleDelete = (keys) => {
+    handleDelete = (key) => {
 
-            var key = this.props.CL_currentData[key];
-            console.log(key);
-            // firebase.database().ref('users/' + key).remove();
+        console.log("A", key)
+
+        var ref = firebase.database().ref("jobs/");
+        ref.orderByChild("uid").equalTo(key).once("value", function (snapshot) {
+
+            // console.warn('------------', snapshot)
+            
+            const obj = snapshot.val();
+            for (let key in obj) {
+                ref.child(key).remove()
+
+                // callback warns in case some error 
+                // ref.child(k).remove((a) => console.warn('eeeeeeeeeeeeeeeeeeeeeee', a))  
+            }
+            firebase.database().ref(`users/${key}`).remove();
+        });
     }
 
-    
     render() {
-        console.log(this.props.CL_currentData)
+        // console.log("+*+", this.props.CL_currentData)
         return (
             <Fragment>
                 <ul>
-                    {this.props.CL_currentData && this.props.CL_currentData.length && this.props.CL_currentData.map((data, key) => (
-
+                    {this.props.CL_currentData && this.props.CL_currentData.length && this.props.CL_currentData.map((data, ) => (
                         <Fragment>
 
                             <Toolbar color="primary">
-                                <Typography variant="display3" key={key}>
+                                <Typography variant="display3">
                                     {data.username}
                                 </Typography>
                             </Toolbar>
@@ -151,18 +148,18 @@ class ShowComapnyDeatils extends Component {
                             <Typography style={styles.pos} color="textSecondary">
                                 Email
                                 </Typography>
-                            <Typography variant="headline" key={key} component="h2">
+                            <Typography variant="headline" component="h2">
                                 {data.email}
                             </Typography>
                             <Typography style={styles.pos} color="textSecondary">
                                 Account
                                 </Typography>
-                            <Typography variant="headline" key={key} component="h2">
+                            <Typography variant="headline" component="h2">
                                 {data.account}
                             </Typography>
                             <Divider />
-                            <Button style={styles.pos} color="primary" sizeLarge variant="raised"
-                                onClick={this.handleDelete.bind(this, key) } key={key}
+                            <Button style={styles.pos} color="primary" variant="raised"
+                                onClick={this.handleDelete.bind(this, data.key)}
                             >Delete</Button>
                         </Fragment>
                     ))}
@@ -171,8 +168,6 @@ class ShowComapnyDeatils extends Component {
         )
     }
 }
-
-
 export {
     ShowComapnyDeatils
 };
