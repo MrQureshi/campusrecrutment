@@ -61,7 +61,6 @@ class Students extends Component {
                             // alert(objStudents);   
                         }
                     }
-
                     let students = [];
                     for (let a in objStudents) {
                         students.push(objStudents[a])
@@ -69,7 +68,7 @@ class Students extends Component {
                     this.setState({
                         students
                     })
-                    // console.log(this.state.students)
+                    // console.log("SS", this.state.students)
                 })
 
             }

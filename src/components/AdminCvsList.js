@@ -63,9 +63,7 @@ class joblist extends Component {
 
                         cvList.push({ ...Cvlist[key], key });
                     }
-                    // console.log("1 "+keys);
-                    // console.log("2 "+objJobs);
-                    // console.log("3 "+jobList);
+                    
                     this.setState({ cvList })
                 })
             }

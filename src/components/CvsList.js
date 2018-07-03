@@ -27,24 +27,25 @@ class joblist extends Component {
         super(props);
 
         this.state = {
-            cvList: [],
-            keys: [],
-            CV_CurrentData: []
+            // cvList: [],
+            CV_CurrentData: [],
+            appliedStudents: []
+
         }
     }
-    
+
     handleClick(uid) {
         // const postKey = firebase.database().ref().child('jobs').push().key;
         // console.log("postkey..." + postKey )
 
         firebase.database().ref('cv/').orderByChild('uid').equalTo(uid).once('value').then((snap) => {
             var objGetCV_CurrentData = snap.val();
-            console.log(objGetCV_CurrentData);
+            // console.log(objGetCV_CurrentData);
             let CV_CurrentData = [];
             for (let getData in objGetCV_CurrentData) {
                 CV_CurrentData.push(objGetCV_CurrentData[getData]);
             }
-            console.log(CV_CurrentData);
+            // console.log(CV_CurrentData);
             this.setState({ CV_CurrentData })
             this.props.sendCV_CurrentData(this.state.CV_CurrentData)
         })
@@ -52,19 +53,84 @@ class joblist extends Component {
     componentDidMount() {
         firebase.auth().onAuthStateChanged(() => {
             if (firebase.auth().currentUser) {
-                firebase.database().ref("cv").on("value", snap => {
-                    var Cvlist = snap.val();
-                    let keys = []
-                    let cvList = [];
-                    for (let key in Cvlist) {
-                        keys.push(key);
-                        cvList.push(Cvlist[key]);
+                var userID = firebase.auth().currentUser.uid;
+
+                // let appliedStudentsDetails = [];
+                console.log("currentId", userID)
+
+                var ref = firebase.database().ref("jobs/");
+                ref.orderByChild("uid").equalTo(userID).on("value", snapshot => {
+                    // console.log("Val", snapshot.val())
+                    // console.log("key", snapshot.key)
+
+                    let currentUserAllJobs = snapshot.val();
+
+                    console.log("currentUserAllJobs", currentUserAllJobs)
+
+
+                    let appliedJobs = {};
+                    for (let key in currentUserAllJobs) {
+                        if (currentUserAllJobs[key].apply) {
+                            appliedJobs[key] = currentUserAllJobs[key].apply;
+                            console.log('appliedJobs', appliedJobs);
+                        }
                     }
-                    // console.log("1 "+keys);
-                    // console.log("2 "+objJobs);
-                    // console.log("3 "+jobList);
-                    this.setState({ cvList, keys })
+
+                    // let appliedJobskeys = []
+                    // for (let key in appliedJobs) {
+                    //     appliedJobskeys.push({ ...appliedJobs[key] })
+                    //     // appliedJobskeys = appliedJobs[key];
+                    // }
+                    
+                    // console.log('appliedJobskeys', appliedJobskeys);
+                    // let appliedJobsDetails= []
+                    // for(let key in appliedJobskeys){
+                    //     appliedJobsDetails.push({...appliedJobskeys[key]})
+                    // } 
+                    // console.log('appliedJobsDetails', appliedJobsDetails )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    // let appliedStudents = [];
+                    // for (let key in objJobsAppliedDetails) {
+                    //     // appliedStudents.push({...objJobsAppliedDetails[key]})
+                    //     appliedStudents[key] = objJobsAppliedDetails[key]
+                    // }
+
+                    // console.log("B", appliedStudents)
+                    // let appliedStudentsDetails = [];
+                    // for(let key in appliedStudents){
+                    //     appliedStudentsDetails.push({...appliedStudents[key], key})
+                    // }
+
+                    // console.log("C", appliedStudentsDetails)
+
                 })
+                // this.setState({ appliedStudents })
+                // console.log("C", this.state.appliedStudents);
             }
         })
     }
@@ -75,14 +141,14 @@ class joblist extends Component {
                 <List component="ul">
                     {/* <ListSubheader component="div">Students List</ListSubheader> */}
                     {
-                        this.state.cvList
+                        this.state.appliedStudents
                             ?
-                            this.state.cvList.map((cv, index) => (
+                            this.state.appliedStudents.map((std, index) => (
 
-                                < ListItem button onClick={this.handleClick.bind(this, cv.uid)} key={index} >
-                                    <ListItemText primary={cv.username} />
-                                    <ListItemText primary={cv.email} />
-                                    
+                                < ListItem button onClick={this.handleClick.bind(this, std.key)} key={index} >
+                                    <ListItemText primary={std.username} />
+                                    <ListItemText primary={std.email} />
+
                                 </ListItem>
                             ))
                             :
@@ -99,21 +165,21 @@ export default joblist;
 
 
 class ShowCVList extends Component {
-    
-        componentWillReceiveProps(nextProps) {
-    
-        }
-        render() {
-            console.log(this.props.CV_CurrentData)
-            return (
-                <Fragment>
-                    <ul>
-                        {this.props.CV_CurrentData && this.props.CV_CurrentData.length && this.props.CV_CurrentData.map((data, index) => (
-    
-    <Fragment>
+
+    componentWillReceiveProps(nextProps) {
+
+    }
+    render() {
+        // console.log(this.props.CV_CurrentData)
+        return (
+            <Fragment>
+                <ul>
+                    {this.props.CV_CurrentData && this.props.CV_CurrentData.length && this.props.CV_CurrentData.map((data, index) => (
+
+                        <Fragment>
 
                             <Toolbar color="primary">
-                                <Typography variant="display3"  key={index}>
+                                <Typography variant="display3" key={index}>
                                     {data.username}
                                 </Typography>
                             </Toolbar>
@@ -152,14 +218,14 @@ class ShowCVList extends Component {
                                 {data.discription}
                             </Typography>
                         </Fragment>
-                        ))}
-                    </ul>
-                </Fragment>
-            )
-        }
+                    ))}
+                </ul>
+            </Fragment>
+        )
     }
-    
-    
-    export {
-        ShowCVList
-    };
+}
+
+
+export {
+    ShowCVList
+};

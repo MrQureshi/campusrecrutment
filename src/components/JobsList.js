@@ -43,7 +43,6 @@ class joblist extends Component {
             // console.log(JL_CurrentData);
             this.setState({ JL_CurrentData })
             this.props.sendJL_CurrentData(this.state.JL_CurrentData);
-            //    localStorage.setItem("key" , JSON.stringify(this.state.JL_CurrentData));
         })
     }
     componentDidMount() {

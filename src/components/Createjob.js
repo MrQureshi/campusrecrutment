@@ -39,10 +39,10 @@ export default class extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { ...initilaState };
     this.state = {
+      ...initilaState,
       open: false,
-    }
+    };
   }
   handletoggle = () => {
     this.setState({
@@ -51,22 +51,21 @@ export default class extends Component {
   }
   componentDidMount() {
     firebase.auth().onAuthStateChanged(() => {
-        if (firebase.auth().currentUser) {
-            var userRef = firebase.database().ref().child("users/" + firebase.auth().currentUser.uid);
-            userRef.on("value", snap => {
-                let objCurrentuser = snap.val()
-
-                this.setState({
-                    users: objCurrentuser
-                })
-
-            })
-        }
-
+      if (firebase.auth().currentUser) {
+        var userRef = firebase.database().ref().child("users/" + firebase.auth().currentUser.uid);
+        userRef.on("value", snap => {
+          let objCurrentuser = snap.val()
+          this.setState({
+            users: objCurrentuser
+          })
+        })
+      }
     })
-}
+  }
 
   onSubmit = (event) => {
+
+    event.preventDefault();
     const {
       jobTitle,
       salary,
@@ -75,7 +74,7 @@ export default class extends Component {
 
     var userID = firebase.auth().currentUser.uid;
 
-    var job ={
+    var job = {
       jobTitle: jobTitle,
       salary: salary,
       discription: discription,
@@ -83,21 +82,18 @@ export default class extends Component {
       username: this.state.users.username,
       email: this.state.users.email
     }
-    
-     // const postKey = firebase.database().ref().child('jobs').push().key;
-        // console.log("postkey..." + postKey )
 
-    // firebase.database().ref().child("jobs").push(
+    // const postKey = firebase.database().ref().child('jobs').push().key;
+    // console.log("postkey..." + postKey )
 
     firebase.database().ref().child('jobs/').push(
       job
-    ).then(()=>{
+    ).then(() => {
       this.setState(() => ({ ...initilaState }));
     }).catch(error => {
       this.setState(byPropKey('error', error))
     })
 
-    // event.preventDefault();
 
   }
   render() {
@@ -109,11 +105,7 @@ export default class extends Component {
       error,
     } = this.state;
 
-    const isInvalid =
-      jobTitle === '' ||
-      salary === '' ||
-      discription === '';
-
+    const isInvalid = jobTitle === '' || salary === '' || discription === '';
 
     return (
       <Fragment>
@@ -133,16 +125,20 @@ export default class extends Component {
             {/* <DialogContentText>
             if you are not register  Please
           </DialogContentText> */}
-            <form onSubmit={this.onSubmit} >
+            <form
+              onSubmit={this.onSubmit}
+            >
               <FormControl style={styles.FormControl}  >
                 <TextField
                   value={jobTitle}
+                  // onChange ={event => this.setState({jobTitle : event.target.value })}
                   onChange={event => this.setState(byPropKey('jobTitle', event.target.value))}
                   label="Job Title"
                   margin="normal"
                 /><br />
                 <TextField
                   value={salary}
+                  // onChange ={event => this.setState({salary : event.target.value })}
                   onChange={event => this.setState(byPropKey('salary', event.target.value))}
                   label="Salary"
                   margin="normal"
@@ -150,6 +146,7 @@ export default class extends Component {
                 /><br />
                 <TextField
                   value={discription}
+                  // onChange ={event => this.setState({discription : event.target.value })}
                   onChange={event => this.setState(byPropKey('discription', event.target.value))}
                   label="Discription"
                   margin="normal"
@@ -157,7 +154,9 @@ export default class extends Component {
                   rows="4"
                 /><br />
                 <Button
-                   disabled={isInvalid}
+                  disabled={isInvalid}
+                  // onClick={this.onSubmit}
+                  onClick={this.handletoggle}
                   type="submit"
                   color="primary"
                   variant="raised" >Create</Button>

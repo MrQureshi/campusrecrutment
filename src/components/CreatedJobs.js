@@ -4,15 +4,17 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 // import ListSubheader from '@material-ui/core/ListSubheader';
+import { Button, } from '@material-ui/core';
 
 import { Typography } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Toolbar from '@material-ui/core/Toolbar';
 
+
+import Jobapplicants from './jobApplicants'
 import * as firebase from 'firebase';
 
 const styles = {
-
     list: {
         width: '100%',
     },
@@ -46,20 +48,20 @@ class joblist extends Component {
     }
     componentDidMount() {
         firebase.auth().onAuthStateChanged(() => {
-            if (firebase.auth().currentUser) {    
-                firebase.database().ref('jobs').orderByChild("uid").equalTo(firebase.auth().currentUser.uid).once('value').then((snap) => {
+            if (firebase.auth().currentUser) {
+                firebase.database().ref('jobs').orderByChild("uid").equalTo(firebase.auth().currentUser.uid).on('value', snap => {
                     var objJobs = snap.val();
                     let jobList = [];
                     for (let key in objJobs) {
-                        jobList.push({...objJobs[key], key});
+                        jobList.push({ ...objJobs[key], key });
                     }
-                    this.setState({ jobList})
+                    this.setState({ jobList })
                 })
             }
         })
     }
     render() {
-        console.log(this.state.jobList)
+        // console.log(this.state.jobList)
         // console.log(this.state.keys)
         return (
             <div style={styles.list}>
@@ -89,6 +91,9 @@ class joblist extends Component {
 export default joblist;
 
 class ShowMyJobs extends Component {
+    
+    
+
     componentWillReceiveProps(nextProps) {
 
     }
@@ -132,13 +137,12 @@ class ShowMyJobs extends Component {
                             <Typography variant="headline" component="h2">
                                 {data.discription}
                             </Typography>
-                            {/* <Typography style={styles.pos} color="textSecondary">
-                                    Experience
-                                    </Typography>
-                                <Typography variant="headline" key={index} component="h2">
-                                    {data.experience}
-                                </Typography> */}
-
+                            <Divider />
+                            {/* <Button style={styles.pos} color="primary" variant="raised"
+                                // onClick={this.handleDelete.bind(this, data.key)}
+                            >Applicants</Button> */}
+                            <Jobapplicants applicents={data.apply} />
+                           
                         </Fragment>
                     ))}
                 </ul>

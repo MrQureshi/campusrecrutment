@@ -27,7 +27,7 @@ const styles = {
 const initilaState = {
     education: '',
     skills: '',
-    experience:'',
+    experience: '',
     discription: '',
     error: null,
 };
@@ -39,18 +39,16 @@ const byPropKey = (propertyName, value) => () => ({
 export default class extends Component {
     constructor(props) {
         super(props);
-        this.state = { ...initilaState };
-        this.state = {
-            open: false,
-        },
-        this.state = {
-            users: {
-                uid: null,
-                username: null,
-                email: null,
-                account: null,
-            }
-        }
+        this.state = { ...initilaState, open: false, };
+        
+            // this.state = {
+            //     users: {
+            //         uid: null,
+            //         username: null,
+            //         email: null,
+            //         account: null,
+            //     }
+            // }
     }
     handletoggle = () => {
         this.setState({
@@ -63,43 +61,40 @@ export default class extends Component {
                 var userRef = firebase.database().ref().child("users/" + firebase.auth().currentUser.uid);
                 userRef.on("value", snap => {
                     let objCurrentuser = snap.val()
-
                     this.setState({
                         users: objCurrentuser
-
                     })
-
+                    console.log("A" ,this.state.users);
                 })
             }
         })
     }
 
     onSubmit = (event) => {
-        console.log("clicked");
+        event.preventDefault();
+        // console.log("clicked");
         const {
             education,
             skills,
             experience,
             discription,
     } = this.state;
-    
+
         var userID = firebase.auth().currentUser.uid;
-        
-        firebase.database().ref('cv/'+userID).set({
+
+        firebase.database().ref('cv/' + userID).set({
             uid: userID,
             username: this.state.users.username,
             email: this.state.users.email,
             education: education,
             skills: skills,
-            experience:experience,
-            discription:discription
-        }).then(()=>{
+            experience: experience,
+            discription: discription
+        }).then(() => {
             this.setState(() => ({ ...initilaState }));
         }).catch(error => {
             this.setState(byPropKey('error', error))
         });
-
-        // event.preventDefault();
     }
     render() {
         const { open } = this.state;
@@ -111,12 +106,8 @@ export default class extends Component {
             error,
     } = this.state;
 
-        const isInvalid =
-            education === '' ||
-            skills === '' ||
-            experience === '' ||
-            discription === '';
-
+        const isInvalid = education === '' || skills === '' ||
+            experience === '' || discription === '';
 
         return (
             <Fragment>
@@ -155,8 +146,8 @@ export default class extends Component {
                                     onChange={event => this.setState(byPropKey('experience', event.target.value))}
                                     label="Experience"
                                     margin="normal"
-                                    // multiline
-                                    // rows="4"
+                                // multiline
+                                // rows="4"
                                 /><br />
                                 <TextField
                                     value={discription}
@@ -168,6 +159,7 @@ export default class extends Component {
                                 /><br />
                                 <Button
                                     disabled={isInvalid}
+                                    onClick={this.handletoggle}
                                     type="submit"
                                     color="primary"
                                     variant="raised" >Create</Button>

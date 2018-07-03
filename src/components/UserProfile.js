@@ -28,7 +28,6 @@ const styles = {
   size: {
     width: 50,
     height: 50,
-
   },
   pad: {
     paddingLeft: 30,
@@ -76,8 +75,6 @@ export default class extends Component {
     return (
       <Fragment>
         <IconButton
-          // aria-owns={open ? 'menu-appbar' : null}
-          // aria-haspopup="true"
           onClick={this.handletoggle}
           color="inherit"
           style={styles.pad}
@@ -98,11 +95,11 @@ export default class extends Component {
                 {this.state.users.username}
               </Typography>
               <Typography variant="title"  >
-              Account : 
+                Account :
                 {this.state.users.account}
               </Typography>
               <Typography variant="title"  >
-                Email : 
+                Email :
                 {this.state.users.email}
               </Typography>
 

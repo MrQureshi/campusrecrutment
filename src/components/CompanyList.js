@@ -66,16 +66,13 @@ class Company extends Component {
 
                     let companies = [];
                     
-                    for (let a in objCompanies) {
-                        companies.push(objCompanies[a])
-                        
+                    for (let key in objCompanies) {
+                        companies.push(objCompanies[key], key)
                     }
                     this.setState({
                         companies,                    
                     })
-                    // console.log("Whats that "+this.state.companies)
-                    
-                    
+                    console.log("Whats that "+this.state.companies)
                 })
             }
         })

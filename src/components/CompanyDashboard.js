@@ -32,7 +32,6 @@ const styles = {
     list: {
         width: '100%',
     },
-
 };
 
 
@@ -77,7 +76,6 @@ class Dashboard extends Component {
 
         });
     }
-
     sendSL_currentData = (SL_currentData) => {
         this.setState({ SL_currentData })
     }
@@ -88,7 +86,6 @@ class Dashboard extends Component {
     sendMJ_CurrentData = (MJ_CurrentData) => {
         this.setState({ MJ_CurrentData })
     }
-
 
     render() {
         return (
