@@ -38,6 +38,8 @@ class Dashboard extends Component {
                 account: null,
             },
             value: 0,
+            myCV: [],
+            
         };
     }
 
@@ -54,13 +56,31 @@ class Dashboard extends Component {
 
                     this.setState({
                         users: objCurrentuser
-
                     })
-
                 })
             }
+            if (firebase.auth().currentUser) {
+                firebase.database().ref('cv/').orderByChild('uid').equalTo(firebase.auth().currentUser.uid).on('value', snap => {
+                    var objCV = snap.val();
+
+                    console.log("CCooo", objCV)
+
+                    let myCV = [];
+                    for (let key in objCV) {
+                        myCV.push({...objCV[key], key});
+                    }
+                    this.setState({
+                        myCV,
+                    })
+                })
+            }
+
+            console.log("UU",this.state.users)
         })
     }
+    
+    
+    
     sendCurrentData = (currentData) => {
         this.setState({ currentData })
     }
@@ -71,9 +91,10 @@ class Dashboard extends Component {
     sendJL_CurrentData = (JL_CurrentData) => {
         this.setState({ JL_CurrentData })
     }
-
-
+    
+    
     render() {
+        console.log("CC", this.state.myCV)
         return (
             <Fragment>
                 <AppBar position="static">
@@ -95,16 +116,16 @@ class Dashboard extends Component {
                 <Grid container>
                     <Grid item xs={4}>
                         <Paper style={styles.paper} >
-                            {this.state.value === 0 ? <CompanyList sendCL_currentData={this.sendCL_currentData} /> : null}
-                            {this.state.value === 1 ? <Jobslist sendJL_CurrentData={this.sendJL_CurrentData} /> : null}
-                            {this.state.value === 2 ? <Fragment> <Createcv /> <Mycv sendCurrentData={this.sendCurrentData} /></Fragment> : null}
+                            {/* {this.state.value === 0 ? <CompanyList sendCL_currentData={this.sendCL_currentData} /> : null} */}
+                            {this.state.value === 0 ? <Jobslist sendJL_CurrentData={this.sendJL_CurrentData} /> : null}
+                            {this.state.value === 1 ? <Fragment>{this.state.myCV.length ? <Mycv sendCurrentData={this.sendCurrentData} /> : <Createcv /> }  </Fragment> : null}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
                         <Paper style={styles.paper} >
-                            {this.state.value === 0 ? <ShowComapnyDeatils CL_currentData={this.state.CL_currentData} /> : null}
-                            {this.state.value === 1 ? <ShowJobList JL_CurrentData={this.state.JL_CurrentData} /> : null}
-                            {this.state.value === 2 ? <ShowCV currentData={this.state.currentData} /> : null}
+                            {/* {this.state.value === 0 ? <ShowComapnyDeatils CL_currentData={this.state.CL_currentData} /> : null} */}
+                            {this.state.value === 0 ? <ShowJobList JL_CurrentData={this.state.JL_CurrentData} /> : null}
+                            {this.state.value === 1 ? <ShowCV currentData={this.state.currentData} /> : null}
                         </Paper>
                     </Grid>
                 </Grid>
@@ -116,7 +137,7 @@ class Dashboard extends Component {
                         textColor="primary"
                         centered
                     >
-                        <Tab label="View Company" />
+                        {/* <Tab label="View Company" /> */}
                         <Tab label="View Jobs" />
                         <Tab label="Creat CV" />
                     </Tabs>

@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-// import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -93,8 +92,6 @@ export default class extends Component {
     }).catch(error => {
       this.setState(byPropKey('error', error))
     })
-
-
   }
   render() {
     const { open } = this.state;
@@ -122,9 +119,6 @@ export default class extends Component {
             Create Job
         </DialogTitle>
           <DialogContent>
-            {/* <DialogContentText>
-            if you are not register  Please
-          </DialogContentText> */}
             <form
               onSubmit={this.onSubmit}
             >

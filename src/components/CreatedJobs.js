@@ -3,13 +3,12 @@ import React, { Component, Fragment } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-// import ListSubheader from '@material-ui/core/ListSubheader';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import { Button, } from '@material-ui/core';
 
 import { Typography } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Toolbar from '@material-ui/core/Toolbar';
-
 
 import Jobapplicants from './jobApplicants'
 import * as firebase from 'firebase';
@@ -65,17 +64,27 @@ class joblist extends Component {
         // console.log(this.state.keys)
         return (
             <div style={styles.list}>
-                <List component="ul">
+                <List component="ul"
+                    subheader={<ListSubheader component="div">Job List</ListSubheader>}
+                >
                     {/* <ListSubheader component="div">Students List</ListSubheader> */}
                     {
                         this.state.jobList
                             ?
+
                             this.state.jobList.map((job, index) => (
-                                < ListItem button onClick={this.handleClick.bind(this, job.key)} key={index} >
-                                    <ListItemText primary={job.jobTitle} />
-                                    <ListItemText primary={job.salary} />
-                                    {/* <ListItemText primary={job.discription} /> */}
-                                </ListItem>
+                                <Fragment>
+                                    < ListItem button onClick={this.handleClick.bind(this, job.key)} key={index} >
+                                        <ListItemText primary={job.jobTitle}
+                                        // secondary="Title"
+                                        />
+                                        <ListItemText primary={job.salary}
+                                        // secondary="Salary"
+                                        />
+                                        {/* <ListItemText primary={job.discription} /> */}
+                                    </ListItem>
+                                    <Divider />
+                                </Fragment>
                             ))
                             :
                             < ListItem  >
@@ -91,8 +100,8 @@ class joblist extends Component {
 export default joblist;
 
 class ShowMyJobs extends Component {
-    
-    
+
+
 
     componentWillReceiveProps(nextProps) {
 
@@ -127,7 +136,7 @@ class ShowMyJobs extends Component {
 
                             <Typography style={styles.pos} color="textSecondary">
                                 Salary
-                                    </Typography>
+                            </Typography>
                             <Typography variant="headline" component="h2">
                                 {data.salary}
                             </Typography>
@@ -142,7 +151,7 @@ class ShowMyJobs extends Component {
                                 // onClick={this.handleDelete.bind(this, data.key)}
                             >Applicants</Button> */}
                             <Jobapplicants applicents={data.apply} />
-                           
+
                         </Fragment>
                     ))}
                 </ul>

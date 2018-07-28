@@ -67,19 +67,22 @@ class joblist extends Component {
     render() {
         return (
             <div style={styles.list}>
-                <List component="ul">
+                <List component="ul"
+                subheader={<ListSubheader component="div">Job List</ListSubheader>}
+                >
                     {/* <ListSubheader component="div">Students List</ListSubheader> */}
                     {
                         this.state.jobList
                             ?
                             this.state.jobList.map((job, index) => (
-
-                                < ListItem button onClick={this.handleClick.bind(this, job.key)} key={index} >
-
-                                    <ListItemText primary={job.jobTitle} />
-                                    <ListItemText primary={job.salary} />
-                                    {/* <ListItemText primary={job.discription} /> */}
-                                </ListItem>
+                                <Fragment>
+                                    < ListItem button onClick={this.handleClick.bind(this, job.key)} key={index} >
+                                        <ListItemText primary={job.jobTitle} />
+                                        <ListItemText primary={job.salary} />
+                                        {/* <ListItemText primary={job.discription} /> */}
+                                    </ListItem>
+                                    <Divider />
+                                </Fragment>
                             ))
                             :
                             < ListItem  >
@@ -145,7 +148,7 @@ class ShowJobList extends Component {
                 console.log("B", obj);
                 var rootRef = firebase.database().ref();
                 const speedRef = rootRef.child("jobs/" + key + "/apply/" + currentId).set(obj)
-    
+
             }
         })
     }

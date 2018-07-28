@@ -12,7 +12,6 @@ import Cvlist, { ShowCVList } from './CvsList'
 
 import * as firebase from 'firebase'
 
-
 const styles = {
     root: {
         flexGrow: 1,
@@ -73,7 +72,6 @@ class Dashboard extends Component {
                     })
                 })
             }
-
         });
     }
     sendSL_currentData = (SL_currentData) => {
@@ -112,20 +110,20 @@ class Dashboard extends Component {
                     <Grid item xs={4}>
                         <Paper style={styles.paper} >
 
-                            {this.state.value === 0 ? <Studentlist sendSL_currentData={this.sendSL_currentData} /> : null}
+                            {/* {this.state.value === 0 ? <Studentlist sendSL_currentData={this.sendSL_currentData} /> : null}
 
-                            {this.state.value === 1 ? <Cvlist sendCV_CurrentData={this.sendCV_CurrentData} /> : null}
+                            {this.state.value === 1 ? <Cvlist sendCV_CurrentData={this.sendCV_CurrentData} /> : null} */}
 
-                            {this.state.value === 2 ? <Fragment> <Createjob /> <Createdjobs sendMJ_CurrentData={this.sendMJ_CurrentData} /> </Fragment> : null}
+                            {this.state.value === 0 ? <Fragment> <Createjob /> <Createdjobs sendMJ_CurrentData={this.sendMJ_CurrentData} /> </Fragment> : null}
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
                         <Paper style={styles.paper} >
-                            {this.state.value === 0 ? <ShowStudentDeatils SL_currentData={this.state.SL_currentData} /> : null}
+                            {/* {this.state.value === 0 ? <ShowStudentDeatils SL_currentData={this.state.SL_currentData} /> : null}
 
-                            {this.state.value === 1 ? <ShowCVList CV_CurrentData={this.state.CV_CurrentData} /> : null}
+                            {this.state.value === 1 ? <ShowCVList CV_CurrentData={this.state.CV_CurrentData} /> : null} */}
 
-                            {this.state.value === 2 ? <ShowMyJobs MJ_CurrentData={this.state.MJ_CurrentData} /> : null}
+                            {this.state.value === 0 ? <ShowMyJobs MJ_CurrentData={this.state.MJ_CurrentData} /> : null}
                         </Paper>
                     </Grid>
                 </Grid>
@@ -137,8 +135,8 @@ class Dashboard extends Component {
                         textColor="primary"
                         centered
                     >
-                        <Tab label="View Students" />
-                        <Tab label="View CVs" />
+                        {/* <Tab label="View Students" />
+                        <Tab label="View CVs" /> */}
                         <Tab label="Created Jobs" />
 
                     </Tabs>
@@ -147,6 +145,5 @@ class Dashboard extends Component {
         )
     }
 }
-
 
 export default Dashboard;

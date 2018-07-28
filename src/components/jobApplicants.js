@@ -30,17 +30,18 @@ function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 
-class FullScreenDialog extends React.Component {
+class ApplicantStudents extends React.Component {
     constructor() {
         super()
         this.state = {
-            AppleidStudentList: []
+            open: false,
+            AppleidStudentList: [],
         }
     }
 
-    state = {
-        open: false,
-    };
+    // state = {
+    //     open: false,
+    // };
 
     handletoggle = () => {
         this.setState({
@@ -134,8 +135,8 @@ class FullScreenDialog extends React.Component {
     }
 }
 
-FullScreenDialog.propTypes = {
+ApplicantStudents.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullScreenDialog);
+export default withStyles(styles)(ApplicantStudents);

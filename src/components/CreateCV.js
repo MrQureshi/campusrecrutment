@@ -40,15 +40,15 @@ export default class extends Component {
     constructor(props) {
         super(props);
         this.state = { ...initilaState, open: false, };
-        
-            // this.state = {
-            //     users: {
-            //         uid: null,
-            //         username: null,
-            //         email: null,
-            //         account: null,
-            //     }
-            // }
+
+        // this.state = {
+        //     users: {
+        //         uid: null,
+        //         username: null,
+        //         email: null,
+        //         account: null,
+        //     }
+        // }
     }
     handletoggle = () => {
         this.setState({
@@ -64,7 +64,7 @@ export default class extends Component {
                     this.setState({
                         users: objCurrentuser
                     })
-                    console.log("A" ,this.state.users);
+                    console.log("A", this.state.users);
                 })
             }
         })
@@ -78,7 +78,7 @@ export default class extends Component {
             skills,
             experience,
             discription,
-    } = this.state;
+        } = this.state;
 
         var userID = firebase.auth().currentUser.uid;
 
@@ -146,8 +146,7 @@ export default class extends Component {
                                     onChange={event => this.setState(byPropKey('experience', event.target.value))}
                                     label="Experience"
                                     margin="normal"
-                                // multiline
-                                // rows="4"
+                                
                                 /><br />
                                 <TextField
                                     value={discription}

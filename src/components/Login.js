@@ -146,12 +146,8 @@ class Form extends Component {
                     <br />
                 </FormControl>
                 {error && <FormHelperText>{error.message} </FormHelperText>}
-
                 <Link to="/Signup">Sign Up</Link>
-
             </form>
-
-
         )
     }
 }
